@@ -16,6 +16,12 @@ class Calendar {
     /********************* PROPERTY ********************/  
     private $dayLabels = array("شنبه","یکشنبه","دوشنبه","سه شنبه","چهارشنبه","پنجشنبه","جمعه");
      
+    private $thisYear=0;
+     
+    private $thisMonth=0;
+     
+    private $thisDay=0;
+
     private $currentYear=0;
      
     private $currentMonth=0;
@@ -35,23 +41,31 @@ class Calendar {
     */
     public function show($year = null, $month = null) {
 
+        $fmt = new IntlDateFormatter("en_US@calendar=persian", IntlDateFormatter::FULL,
+        IntlDateFormatter::FULL, 'Asia/Tehran', IntlDateFormatter::TRADITIONAL);
 
+        $fmt->setPattern("Y");
+        $thisyear = $fmt->format(time());
+    
+        $fmt->setPattern("M");
+        $thismonth = $fmt->format(time());
+
+        $fmt->setPattern("d");
+        $thisday = $fmt->format(time());
+
+
+
+        $year = ($year == null) ? $thisyear : $year;
         
+        $month = ($month == null) ? $thismonth : $month;
 
 
-        if(null==$year){
-            $fmt = new IntlDateFormatter("en_US@calendar=persian", IntlDateFormatter::FULL,
-            IntlDateFormatter::FULL, 'Asia/Tehran', IntlDateFormatter::TRADITIONAL, 'yyyy');
-            $year = $fmt->format(time());  
+
+        $this->thisYear=$thisyear;
          
-        }          
-         
-        if(null==$month){
-            $fmt = new IntlDateFormatter("en_US@calendar=persian", IntlDateFormatter::FULL,
-            IntlDateFormatter::FULL, 'Asia/Tehran', IntlDateFormatter::TRADITIONAL, 'M');
-            $month = $fmt->format(time());
-         
-        }                  
+        $this->thisMonth=$thismonth;
+
+        $this->thisDay=$thisday;
          
         $this->currentYear=$year;
          
@@ -113,7 +127,9 @@ class Calendar {
              
             $cellContent = $this->currentDay;
              
-            $this->currentDay++;   
+            $this->currentDay++;
+
+            
              
         }else{
              
@@ -121,12 +137,11 @@ class Calendar {
  
             $cellContent=null;
         }
-             
+
+        $disabled=(($this->currentYear==$this->thisYear)&&($this->currentMonth==$this->thisMonth)&&($this->currentDay<$this->thisDay))?true:false;     
          
-        return '<li id="li-'.$this->currentDate.'" class="'.($cellNumber%7==1?' start ':($cellNumber%7==0?' end ':' ')).
-                ($cellContent==null?'mask':'').'">'.$cellContent.'</li>';
+        return '<li id="li-'.$this->currentDate.'" class="'.($cellNumber%7==1?'start':($cellNumber%7==0?'end':' ')).($cellContent==null?' mask':'').($disabled?' disabled':'').'">'.$cellContent.'</li>';
     }
-     
     /**
     * create navigation
     */
@@ -177,6 +192,7 @@ class Calendar {
         // convert date from jalali to gregorian 
         $gregorian = $this->jalali_to_gregorian($year,$month,01,'-');
 
+        // get month start day
         $date = new DateTime($gregorian);
 
         $fmt->setPattern("e");
