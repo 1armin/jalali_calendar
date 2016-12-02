@@ -177,7 +177,6 @@ class Calendar {
         // convert date from jalali to gregorian 
         $gregorian = $this->jalali_to_gregorian($year,$month,01,'-');
 
-        // get month start day
         $date = new DateTime($gregorian);
 
         $fmt->setPattern("e");
