@@ -114,7 +114,15 @@ div#calendar ul.dates li{
     color:#000;
     text-align:center; 
 }
- 
+div#calendar ul.dates li.disabled{
+	opacity: .4;
+}
+div#calendar ul.dates li.end{
+	color: red;
+}
+div#calendar ul.dates li.mask{
+	opacity: .4;
+}
 :focus{
     outline:none;
 }
