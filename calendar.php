@@ -71,6 +71,8 @@ class Calendar {
          
         $this->currentMonth=$month;
          
+         $this->currentDay=0;
+         
         $this->daysInMonth=$this->_daysInMonth($year,$month);  
          
         $content='<div id="calendar">'.
