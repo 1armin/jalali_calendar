@@ -230,6 +230,7 @@ class Calendar {
 
         if (intval($month) == 12) {
             $res = (intval($year) + 2346) * 0.24219858156;
+            $res = $res - floor($res);
             if ($res <= 0.24219858156) {
                 return 30;
             }
